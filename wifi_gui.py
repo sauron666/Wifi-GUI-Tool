@@ -613,7 +613,7 @@ class WiFiAutopwnerProGUI(tk.Tk):
     def show_warning(self):
         """Показва предупреждение за законна употреба."""
         messagebox.showwarning("Внимание",
-            "Това приложение е предназначено само за законни тестове на сигурността и етичен хакинг.\n"
+            "Това приложение е предназначено само за законни тестове на сигурността и етично хакерство.\n"
             "Използването му без изрично разрешение е незаконно!\n\n"
             "Използвайте отговорно и в съответствие с местните закони и регулации.")
 
@@ -949,8 +949,36 @@ class WiFiAutopwnerProGUI(tk.Tk):
                 self.log_message(f"Грешка при експорт: {e}", "error")
 
     def show_settings(self):
-        """Показва настройките"""
-        messagebox.showinfo("Настройки", f"Текущи настройки:\nИнтерфейс: {self.interface.get()}\nДиректория за речници: {self.wordlists_dir}")
+        """Показва текущите настройки на инструмента."""
+        dialog = tk.Toplevel(self)
+        dialog.title("Настройки")
+        dialog.geometry("400x300")
+        dialog.configure(bg="#1E1E1E")
+    
+        # Заглавие
+        ttk.Label(dialog, text="Конфигурация на инструмента", font=("Arial", 12, "bold")).pack(pady=10)
+    
+        # Настройки
+        settings_frame = ttk.Frame(dialog)
+        settings_frame.pack(fill="both", expand=True, padx=10, pady=10)
+    
+        settings = {
+            "Интерфейс": self.interface.get(),
+            "Филтър WPA/WEP": self.filter_encryption.get(),
+            "Само WPS": "Да" if self.filter_wps.get() else "Не",
+            "WPA3 поддръжка": "Да" if self.wpa3_support.get() else "Не",
+            "GPU ускорение": "Да" if self.gpu_acceleration.get() else "Не",
+            "Стелт режим": "Да" if self.stealth_mode.get() else "Не",
+            "Максимални паралелни атаки": self.concurrent_attacks.get()
+        }
+    
+        for key, value in settings.items():
+            ttk.Label(settings_frame, text=f"{key}:").pack(anchor="w")
+            ttk.Label(settings_frame, text=f"{value}", foreground="#4CAF50").pack(anchor="w", pady=(0, 5))
+    
+        # Бутон за затваряне
+        ttk.Button(dialog, text="Затвори", command=dialog.destroy).pack(pady=10)
+
 
     def refresh_interfaces(self):
         """Обновява списъка с интерфейси"""
